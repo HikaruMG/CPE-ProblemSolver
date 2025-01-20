@@ -1,0 +1,1 @@
+{"name":"Local: SearchSum","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week2\\SearchSum.cpp","tests":[{"id":1737316114706,"input":"3 3\n10\n20\n30\n15\n30\n7","output":"1\n2\n0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week2\\SearchSum.cpp","group":"local","local":true}

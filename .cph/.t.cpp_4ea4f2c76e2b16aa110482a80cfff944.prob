@@ -1,0 +1,1 @@
+{"name":"Local: t","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\t.cpp","tests":[{"id":1736341366546,"input":"5 60\n 50 0\n 100 0\n 100 50\n 50 30\n 70 50","output":"3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\t.cpp","group":"local","local":true}
