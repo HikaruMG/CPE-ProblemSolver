@@ -14,12 +14,12 @@ int main() {
     // for(list<int>::iterator it = l.begin(); it != l.end(); it++) {
     //     cout << *it << endl;
     // }
-    for(auto it = l.begin(); it != l.end(); it++) { 
-        cout << it->first << " " << it->second << endl;
-    }
-    // for(int i = 0; i < l.size(); i++) {
-    //     cout << l[i] << endl;
+    // for(auto it = l.begin(); it != l.end(); it++) { 
+    //     cout << it->first << " " << it->second << endl;
     // }
+    for(int i = 0; i < l.size(); i++) {
+        cout << l[i] << endl;
+    }
     
     
 }

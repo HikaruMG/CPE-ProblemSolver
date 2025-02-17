@@ -1,0 +1,1 @@
+{"name":"Local: MST","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week8\\MST.cpp","tests":[{"id":1738932912076,"input":"4 5 \n1 2 10 \n1 3 20 \n3 4 5 \n4 2 7 \n2 3 12","output":"22"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week8\\MST.cpp","group":"local","local":true}
