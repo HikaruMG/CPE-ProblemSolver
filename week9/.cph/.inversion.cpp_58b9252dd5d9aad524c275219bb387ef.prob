@@ -1,0 +1,1 @@
+{"name":"Local: inversion","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\week9\\inversion.cpp","tests":[{"id":1739967187838,"input":"5 \n1 \n3 \n10 \n2 \n7","output":"3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\week9\\inversion.cpp","group":"local","local":true}
