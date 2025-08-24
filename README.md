@@ -1,1 +1,1 @@
-mai nok
+mai yak pod
