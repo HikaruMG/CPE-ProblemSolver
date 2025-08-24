@@ -3,7 +3,7 @@ using namespace std;
 
 // ฟังก์ชันสำหรับการรวม (Merge)
 void merge(int arr[], int left, int mid, int right) {
-    // ขนาดของสองส่วนย่อย
+    // ขนาดของสองส่วน
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
