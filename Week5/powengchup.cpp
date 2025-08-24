@@ -1,59 +1,83 @@
-#include <iostream>
-#include <vector>
-#include <set>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// ฟังก์ชันเพื่อตรวจสอบว่าสามารถแบ่งคนเป็นสองบริษัทได้หรือไม่หลังจากลบคู่ที่กำหนด
-bool canDivide(int n, vector<pair<int, int>>& matches, int exclude1, int exclude2) {
-    vector<int> company(n + 1, -1); // -1 หมายความว่ายังไม่ได้ถูกกำหนดบริษัท
+struct play{
+    int x,y;
+    play(int x_,int y_) : x(x_),y(y_) {}
+};
 
-    for (auto match : matches) {
-        // ข้ามคู่ที่กำลังตรวจสอบการลบ
-        if ((match.first == exclude1 && match.second == exclude2) || (match.first == exclude2 && match.second == exclude1)) {
-            continue;
-        }
+bool CheckBI(vector<vector<int>> adj, vector<play> E,int n,int nextE){
+    queue<int> q;
+    vector<int> TwoColor(n+1,-1);
+    TwoColor[1]=0;
+    q.push(1);
 
-        int person1 = match.first;
-        int person2 = match.second;
-
-        // กรณีทั้งสองคนยังไม่ได้ถูกกำหนดบริษัท
-        if (company[person1] == -1 && company[person2] == -1) {
-            company[person1] = 0;
-            company[person2] = 1;
-        }
-        // กรณีคนแรกยังไม่ถูกกำหนดบริษัท
-        else if (company[person1] == -1) {
-            company[person1] = 1 - company[person2];
-        }
-        // กรณีคนที่สองยังไม่ถูกกำหนดบริษัท
-        else if (company[person2] == -1) {
-            company[person2] = 1 - company[person1];
-        }
-        // กรณีทั้งสองคนถูกกำหนดบริษัทแล้วและอยู่ในบริษัทเดียวกัน
-        else if (company[person1] == company[person2]) {
-            return false;
+    while (!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        
+        for(int temp : adj[node]){
+            if (nextE != -1 and ((node == E[nextE].x and temp == E[nextE].y or \
+                                node == E[nextE].y and temp == E[nextE].x))){
+                                    continue;
+                                }
+            if(TwoColor[temp]==-1){
+                TwoColor[temp] = 1-TwoColor[node];
+                q.push(temp);
+            }
+            else if(TwoColor[temp]==TwoColor[node]){
+                return false;
+            }
         }
     }
-    return true;
+    for(int j = 1; j<=n;j++){
+        if (TwoColor[j]==-1){
+            TwoColor[j]=0;
+            q.push(j);
+            while (!q.empty()){
+                int node = q.front();
+                q.pop();
+        
+                for(int temp : adj[node]){
+                    if (nextE != -1 and ((node == E[nextE].x and temp == E[nextE].y or \
+                                        node == E[nextE].y and temp == E[nextE].x))){
+                                            continue;
+                                }
+                    if(TwoColor[temp]==-1){
+                        TwoColor[temp] = 1-TwoColor[node];
+                        q.push(temp);
+                    }
+                    else if(TwoColor[temp]==TwoColor[node]){
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;  
 }
 
-int main() {
-    int n, m;
-    cin >> n >> m; // อ่านจำนวนคนและจำนวนคู่ของประวัติการเล่นเป่ายิ้งฉุบ
+int main(){
+    int n,m;
+    cin >> n >>m;
+    
+    vector<vector<int>> adj(n+1);
+    vector<play> E;
 
-    vector<pair<int, int>> matches(m);
-    for (int i = 0; i < m; ++i) {
-        cin >> matches[i].first >> matches[i].second; // อ่านคู่ของประวัติการเล่นเป่ายิ้งฉุบ
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin >> u >> v;
+        E.push_back(play(u,v));
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+
     }
-
-    // ตรวจสอบคู่ของประวัติการเล่นเป่ายิ้งฉุบทั้งหมด
-    for (auto match : matches) {
-        if (canDivide(n, matches, match.first, match.second)) {
-            cout << match.first << " " << match.second << endl; // แสดงผลคู่ที่สามารถลบออกได้
-            break;
+    for(int i = 0;i<m;i++){
+        if(CheckBI(adj,E,n,i)){
+            cout << E[i].x << " " << E[i].y << endl;
         }
     }
+    
 
-    return 0;
 }

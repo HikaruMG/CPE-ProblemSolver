@@ -1,0 +1,1 @@
+{"name":"Local: tophit","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\midterm\\tophit.cpp","tests":[{"id":1741507674176,"input":"10 5 20\n1\n1\n2\n1\n2\n3\n4\n4\n3\n4","output":"1 3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\midterm\\tophit.cpp","group":"local","local":true}

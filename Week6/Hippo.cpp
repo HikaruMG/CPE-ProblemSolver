@@ -1,42 +1,43 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
+vector<int> Height;
 
+long long play(int N, int H, int Ta, int Td, vector<int>& Height) {
+    long long total = 0;
+    vector<bool> Isused(N, false);
+    int r = N - 1;
+    for (int i = 0; i < N; i++) {
+        if (Isused[i]) continue;
+        while (r > i && (Height[i] + Height[r] >= H || Isused[r])) {
+            r--;
+        }
+        if (r > i && Height[i]+Height[r] < H && !Isused[r] && 2*Ta>Td) {
+            total += Td;
+            Isused[r] = Isused[i] = true;
+        } else {
+            total += Ta;
+            Isused[i] = true;
+        }
+    }
+    return total;
+}
 int main() {
-    int C;  // Number of test cases
+    int C; 
     cin >> C;
     
-    for (int case_num = 1; case_num <= C; ++case_num) {
-        int N, H, Ta, Td;
+    for (int i = 1; i <= C; ++i) {
+        int Ta, Td,N,H;
         cin >> N >> H >> Ta >> Td;
-        
-        vector<int> heights(N);
-        for (int i = 0; i < N; ++i) {
-            cin >> heights[i];
+        Height.resize(N);
+
+        for (int k = 0; k < N; ++k) {
+            cin >> Height[k];
         }
-        
-        // Sort the heights to facilitate pairing smaller hippos with larger ones
-        sort(heights.begin(), heights.end());
-        
-        int total_time = 0;
-        int i = 0;
-        
-        while (i < N) {
-            if (i + 1 < N && heights[i] + heights[i + 1] < H) {
-                // Pair the i-th and (i+1)-th hippos
-                total_time += Td;
-                i += 2;  // Skip the next hippo since it's paired
-            } else {
-                // The i-th hippo walks alone
-                total_time += Ta;
-                i += 1;  // Move to the next hippo
-            }
-        }
-        
-        // Output the result for this case
-        cout << "Case" << case_num << ": " << total_time << endl;
+        sort(Height.begin(), Height.end());
+        long long total = play(N, H, Ta, Td, Height); 
+        cout << "Case " << i << ": " << total << endl;
     }
     
     return 0;

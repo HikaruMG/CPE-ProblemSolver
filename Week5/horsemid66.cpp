@@ -1,84 +1,82 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// โครงสร้างข้อมูลสำหรับการเก็บตำแหน่งและจำนวนก้าว
-struct Point {
-    int x, y, steps;
+struct Horse {
+    int x, y, dist, KnightMove;
+    Horse(int x_, int y_, int dist_, int used_) : x(x_), y(y_), dist(dist_), KnightMove(used_) {}
 };
 
-// การเคลื่อนที่ที่สามารถทำได้
-const vector<Point> moves = {
-    {-1, 0, 1},  // ขึ้น 1 เซลล์
-    {1, 0, 1},   // ลง 1 เซลล์
-    {0, -1, 1},  // ซ้าย 1 เซลล์
-    {0, 1, 1},   // ขวา 1 เซลล์
-    {-2, 0, 2},  // ขึ้น 2 เซลล์
-    {2, 0, 2},   // ลง 2 เซลล์
-    {0, -2, 2},  // ซ้าย 2 เซลล์
-    {0, 2, 2}    // ขวา 2 เซลล์
-};
+// 4 ทิศทางปกติ
+const int DirectRow[] = {-1, 1, 0, 0}; 
+const int DirectColumn[] = {0, 0, -1, 1}; 
 
-// ฟังก์ชันตรวจสอบการเคลื่อนที่ว่าอยู่ในขอบเขตและเป็นเซลล์ที่สามารถเดินได้หรือไม่
-bool isValidMove(int x, int y, int N, vector<vector<char>>& grid) {
-    return (x >= 0 && x < N && y >= 0 && y < N && grid[x][y] == '.');
+// 8 ทิศทางกระโดดแบบม้า
+const int KDirectRow[] = {-2, -2, -1, -1, 2, 2, 1, 1};
+const int KDirectColumn[] = {-1, 1, -2, 2, -1, 1, -2, 2};
+
+bool CanMove(const vector<vector<char>>& Chess, int x, int y, int n) {
+    return (x >= 0 && x < n && y >= 0 && y < n && Chess[x][y] == '.');
 }
 
-// ฟังก์ชันหาเส้นทางที่สั้นที่สุดจากจุดเริ่มต้นไปยังจุดสิ้นสุด
-int minStepsToReachEnd(vector<vector<char>>& grid) {
-    int N = grid.size();
-    vector<vector<bool>> visited(N, vector<bool>(N, false));  // เก็บสถานะการเยี่ยมชมแต่ละเซลล์
-    queue<Point> q;  // คิวสำหรับการค้นหาแบบ BFS
-    q.push({0, 0, 0});  // เริ่มต้นที่ (0, 0) ด้วยจำนวนก้าว 0
-    visited[0][0] = true;
-
+int play(const vector<vector<char>>& Chess, int n) {
+    if (Chess[0][0] != '.' || Chess[n-1][n-1] != '.') {
+        return -1;
+    }
+    
+    vector<vector<vector<bool>>> visited(n, vector<vector<bool>>(n, vector<bool>(2, false)));
+    queue<Horse> q;
+    
+    q.push({0, 0, 0, 0}); // (x, y, distance, KnightMove)
+    visited[0][0][0] = true;
+    
     while (!q.empty()) {
-        Point current = q.front();
+        Horse Cnode = q.front();
         q.pop();
-
-        // ถ้าถึงจุดสิ้นสุด ให้คืนค่าจำนวนก้าว
-        if (current.x == N - 1 && current.y == N - 1) {
-            return current.steps;
+        
+        if (Cnode.x == n-1 && Cnode.y == n-1) {
+            return Cnode.dist;
         }
 
-        // ตรวจสอบการเคลื่อนที่ที่เป็นไปได้ทั้งหมด
-        for (const auto& move : moves) {
-            int newX = current.x + move.x;
-            int newY = current.y + move.y;
+        for (int d = 0; d < 4; ++d) {
+            int nextX = Cnode.x + DirectRow[d];
+            int nextY = Cnode.y + DirectColumn[d];
 
-            // ถ้าการเคลื่อนที่ถูกต้องและยังไม่เคยเยี่ยมชม ให้เพิ่มเข้าไปในคิว
-            if (isValidMove(newX, newY, N, grid) && !visited[newX][newY]) {
-                q.push({newX, newY, current.steps + move.steps});
-                visited[newX][newY] = true;
+            if (CanMove(Chess, nextX, nextY, n) && !visited[nextX][nextY][Cnode.KnightMove]) {
+                q.push({nextX, nextY, Cnode.dist + 1, Cnode.KnightMove});
+                visited[nextX][nextY][Cnode.KnightMove] = true;
+            }
+        }
+
+        if (Cnode.KnightMove == 0) {
+            for (int d = 0; d < 8; ++d) {
+                int nextX = Cnode.x + KDirectRow[d];
+                int nextY = Cnode.y + KDirectColumn[d];
+
+                if (CanMove(Chess, nextX, nextY, n) && !visited[nextX][nextY][1]) {
+                    q.push({nextX, nextY, Cnode.dist + 1, 1});
+                    visited[nextX][nextY][1] = true;
+                }
             }
         }
     }
-
-    return -1; // ถ้าไม่มีเส้นทาง
+    return -1;
 }
 
 int main() {
-    int N;
-    cin >> N;  // อ่านขนาดของตาราง
-    vector<vector<char>> grid(N, vector<char>(N));
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n;
+    cin >> n;
+    vector<vector<char>> Chess(n, vector<char>(n));
 
-    // อ่านค่าของตาราง
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            cin >> grid[i][j];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> Chess[i][j];
         }
     }
 
-    int result = minStepsToReachEnd(grid);
-
-    // แสดงผลจำนวนก้าวที่น้อยที่สุดหรือแสดงว่าไม่มีเส้นทาง
-    if (result != -1) {
-        cout << result << endl;
-    } else {
-        cout << "ไม่มีเส้นทาง" << endl;
-    }
+    cout << play(Chess, n) << endl;
 
     return 0;
 }

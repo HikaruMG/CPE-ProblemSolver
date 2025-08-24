@@ -8,39 +8,31 @@ int main() {
         int n, d, r;
         cin >> n >> d >> r;
         
-        // ตรวจสอบว่าเป็นกรณีที่ไม่มีข้อมูล
         if (n == 0 && d == 0 && r == 0) {
             break;
         }
+        vector<int> AM(n);  
+        vector<int> PM(n);
         
-        vector<int> morning(n), evening(n);
-        
-        // รับข้อมูลเส้นทางรถบัสเช้า
         for (int i = 0; i < n; i++) {
-            cin >> morning[i];
+            cin >> AM[i];
         }
         
-        // รับข้อมูลเส้นทางรถบัสเย็น
         for (int i = 0; i < n; i++) {
-            cin >> evening[i];
+            cin >> PM[i];
         }
         
-        // เรียงลำดับเส้นทางทั้งสองเพื่อให้ค่าล่วงเวลาน้อยที่สุด
-        sort(morning.begin(), morning.end());
-        sort(evening.begin(), evening.end());
+        sort(AM.begin(), AM.end());                    
+        sort(PM.begin(), PM.end(), greater<int>());    
         
-        int totalOvertime = 0;
-        
-        // คำนวณค่าล่วงเวลาสำหรับแต่ละคนขับ
+        long long OT = 0;
         for (int i = 0; i < n; i++) {
-            int totalLength = morning[i] + evening[i];
-            if (totalLength > d) {
-                totalOvertime += (totalLength - d) * r;
+            int totalRoute = AM[i] + PM[i];
+            if (totalRoute > d) {
+                OT += (long long)(totalRoute - d) * r;  
             }
         }
-        
-        // แสดงผลค่าล่วงเวลารวม
-        cout << totalOvertime << endl;
+        cout << OT << endl;
     }
     
     return 0;

@@ -1,88 +1,97 @@
 #include <iostream>
-#include <queue>
 #include <vector>
-
+#include <queue>
+#include <algorithm>
 using namespace std;
 
-struct State {
-    int x, y, usedKey;
-};
-
-bool isValid(int x, int y, int n) {
+bool Isinmap(int x, int y, int n) {
     return x >= 0 && x < n && y >= 0 && y < n;
 }
+struct CurrentBFS {
+    int x, y, IsneedKey;
+};
 
-bool canReach(vector<vector<char>>& maze, int n, int R, int C, int A, int B) {
+bool Walk(int n,int r,int c,int a,int b,vector<vector<char>>& maze) {
+    int DistX[] = {-1, 1, 0, 0};
+    int DistY[] = {0, 0, -1, 1};
     vector<vector<vector<bool>>> visited(n, vector<vector<bool>>(n, vector<bool>(2, false)));
-    queue<State> q;
+    queue<CurrentBFS> q;
+    visited[r][c][0] = true;
+    q.push({r, c, 0});
+
+    // Debug
+    // cout << "r: " << r << " c: " << c << " a: " << a << " b: " << b << endl;
+    // cout << endl;
     
-    // เริ่มจากตำแหน่ง (R, C) โดยไม่มีการใช้กุญแจ
-    q.push({R, C, 0});
-    visited[R][C][0] = true;
+    
+    while (!q.empty())  
+    {
+        /* code */
+        CurrentBFS node = q.front();
 
-    // ทิศทางการเดิน (ขึ้น, ลง, ซ้าย, ขวา)
-    int dx[] = {-1, 1, 0, 0};
-    int dy[] = {0, 0, -1, 1};
-
-    while (!q.empty()) {
-        State curr = q.front();
+        // cout << "node: " << node.x << " " << node.y << " " << node.IsneedKey << endl;
         q.pop();
-
-        // ถ้าถึงจุดปลาย
-        if (curr.x == A && curr.y == B) {
+        
+        if (node.x == a && node.y == b) {
+            // Debug
+            // cout << node.x << " == "<< a << " " << node.y << " == "<< b << " " << node.IsneedKey << endl;
+            // cout << "Yes" << endl;
+            // cout << endl;
             return true;
         }
-
-        // ลูปเดินทางไปทิศทางต่างๆ
-        for (int i = 0; i < 4; ++i) {
-            int nx = curr.x + dx[i];
-            int ny = curr.y + dy[i];
-
-            if (isValid(nx, ny, n) && !visited[nx][ny][curr.usedKey]) {
-                if (maze[nx][ny] == '#') continue; // กำแพง
-
-                if (maze[nx][ny] == '0') { // ประตู
-                    if (curr.usedKey == 0) { // ยังไม่มีการใช้กุญแจ
-                        // ใช้กุญแจแล้วเดินต่อ
-                        visited[nx][ny][1] = true;
-                        q.push({nx, ny, 1});
-                    }
-                } else { // ทางเดินปกติ
-                    visited[nx][ny][curr.usedKey] = true;
-                    q.push({nx, ny, curr.usedKey});
+        for (int i = 0; i < 4; i++) {
+            int moveX = node.x + DistX[i];  
+            int moveY = node.y + DistY[i];  
+            
+            if (Isinmap(moveX, moveY, n) && !visited[moveX][moveY][node.IsneedKey]) {
+                // cout << "moveX: " << moveX << " moveY: " << moveY << endl;
+                if (maze[moveX][moveY] == '#'){
+                    // cout << "Wall" << endl;
+                     continue; // กำแพง
                 }
+                if (maze[moveX][moveY] == 'O') { // ประตู
+                    // cout << "Door" << endl;
+                    if (node.IsneedKey == 0) {
+                        visited[moveX][moveY][1] = true;
+                        q.push({moveX, moveY, 1});
+                    }
+                }
+                else{
+                    // cout << "Normal" << endl;
+                    visited[moveX][moveY][node.IsneedKey] = true;
+                    q.push({moveX, moveY, node.IsneedKey});
+                }
+            }
+            else{
+                // cout << moveX << " " << moveY << " " << node.IsneedKey << " " << endl;
+                // cout << "Out of map" << endl;
+                // cout << endl;
             }
         }
     }
-
-    return false; // ถ้าไม่มีทางไปถึง
+    return false;
 }
 
 int main() {
-    int n, q;
+    int n,q, r, c, a, b;
     cin >> n >> q;
-
     vector<vector<char>> maze(n, vector<char>(n));
-
-    // อ่านแผนที่
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             cin >> maze[i][j];
         }
     }
 
-    // ตอบคำถาม
-    for (int i = 0; i < q; ++i) {
-        int R, C, A, B;
-        cin >> R >> C >> A >> B;
-        R--; C--; A--; B--; // เปลี่ยนจาก 1-based เป็น 0-based index
-
-        if (canReach(maze, n, R, C, A, B)) {
+    for (int i = 0; i < q; i++) {
+        
+        cin >> r >> c >> a >> b;
+        // cout << "r: " << r << " c: " << c << " a: " << a << " b: " << b << endl;
+        r--; c--; a--; b--;
+        if (Walk(n, r, c, a, b, maze)) {
             cout << "yes" << endl;
         } else {
             cout << "no" << endl;
         }
     }
-
     return 0;
 }

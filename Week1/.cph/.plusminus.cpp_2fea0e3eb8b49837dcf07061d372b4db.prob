@@ -1,0 +1,1 @@
+{"name":"Local: plusminus","url":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week1\\plusminus.cpp","tests":[{"id":1743664558469,"input":"6\n10 + 5 - 7 + 4 + 10 - 3","output":"19"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\jirap\\OneDrive\\Desktop\\Gits\\Problem-Solve\\Week1\\plusminus.cpp","group":"local","local":true}

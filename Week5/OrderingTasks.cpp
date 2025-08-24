@@ -1,61 +1,51 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
 
-int main() {
-    while (true) {
-        int n, m;
-        cin >> n >> m;
-        
-        if (n == 0 && m == 0) break;
-        
-        // กราฟแทนด้วยแอดจาเซนซีลิสต์
-        vector<vector<int>> adj(n + 1);
-        vector<int> inDegree(n + 1, 0);
-        
-        // อ่านข้อมูลความสัมพันธ์การทำงาน
-        for (int i = 0; i < m; i++) {
-            int u, v;
-            cin >> u >> v;
-            adj[u].push_back(v);
-            inDegree[v]++;
+void T(vector<vector<int>> graph, vector<int> indg , int n){
+    queue<int> q;
+    vector<int> ans;
+    for(int i = 1; i<=n; i++){
+        if(indg[i] == 0){
+            q.push(i);
         }
-        
-        // คิวสำหรับการประมวลผลงานที่ไม่มีข้อกำหนด
-        queue<int> q;
-        
-        // เพิ่มงานที่มี In-degree เป็น 0 ลงในคิว
-        for (int i = 1; i <= n; i++) {
-            if (inDegree[i] == 0) {
-                q.push(i);
-            }
-        }
-        
-        // ลำดับงานที่จัดเรียงแล้ว
-        vector<int> topOrder;
-        
-        // ใช้ Kahn's Algorithm
-        while (!q.empty()) {
-            int task = q.front();
-            q.pop();
-            topOrder.push_back(task);
-            
-            // ลด In-degree ของงานที่ขึ้นอยู่กับงานปัจจุบัน
-            for (int neighbor : adj[task]) {
-                inDegree[neighbor]--;
-                if (inDegree[neighbor] == 0) {
-                    q.push(neighbor);
-                }
-            }
-        }
-        
-        // พิมพ์ลำดับงานที่จัดเรียงแล้ว
-        for (int i = 0; i < topOrder.size(); i++) {
-            cout << topOrder[i] << " ";
-        }
-        cout << endl;
     }
-    
+
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        ans.push_back(node);
+        for(int temp : graph[node]){
+            indg[temp]--;
+            if(indg[temp]==0){
+                q.push(temp);
+            }
+        }
+    }
+    for(int j = 0;j<ans.size();j++){
+        cout << ans[j] << " ";
+        // if (j<ans.size()-1){
+        //     cout << " ";
+        // } 
+    }
+    cout << endl;
+}
+
+int main(){
+    int n,m;
+    while(1){
+        cin >> n >> m;
+        if(m==0 and n==0){
+            break;
+        }
+        vector<vector<int>> graph(n+1);
+        vector<int> Indg(n+1,0);
+        for(int j = 0;j<m;j++){
+            int u,v;
+            cin >> u >> v;
+            graph[u].push_back(v);
+            Indg[v]++;
+        }
+        T(graph,Indg,n);
+    }
     return 0;
 }

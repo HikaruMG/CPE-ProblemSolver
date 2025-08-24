@@ -1,42 +1,35 @@
 #include <iostream>
 #include <set>
 #include <vector>
-#include <cmath>
+#include <cmath>   
 using namespace std;
 
 int main() {
-    int N, M;
-    cin >> N >> M;
-
-    set<int> elements;
-    for (int i = 0; i < N; ++i) {
+    int n,m;
+    cin >> n >> m;
+    set<int> s;
+    for (int i = 0; i < n; i++) {
         int x;
         cin >> x;
-        elements.insert(x);
+        s.insert(x);
     }
-
-    vector<int> results;
-    for (int j = 0; j < M; ++j) {
+    vector<int> v;
+    for (int i = 0; i < m; i++) {
         int y;
         cin >> y;
-
-        auto it = elements.lower_bound(y); // หา element ที่ >= y
-        int closest = *it;                // ตั้งค่าเริ่มต้นเป็น lower_bound
-
-        // ตรวจสอบ element ก่อน lower_bound ถ้ามี
-        if (it != elements.begin()) {
-            auto prev_it = prev(it);
-            if (abs(*prev_it - y) <= abs(closest - y)) {
-                closest = *prev_it;
+        auto iterator = s.lower_bound(y);
+        int closest = *iterator;
+        //lower_bound(first, last, value) ใช้ค้นหาค่าที่ "ไม่ต่ำกว่า" (≥ value)
+        //upper_bound(first, last, value) ใช้ค้นหาค่าที่ "มากกว่า" (> value)
+        if (iterator != s.begin()) {
+            auto prev_iterator = prev(iterator);
+            if (abs(*prev_iterator-y)<=abs(closest-y)) {
+                closest = *prev_iterator;
             }
         }
-
-        results.push_back(closest);
+        v.push_back(closest);
     }
-
-    for (int res : results) {
-        cout << res << endl;
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << endl;
     }
-
-    return 0;
 }

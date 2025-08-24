@@ -1,52 +1,83 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 using namespace std;
 
-void processDeck(int n) {
-    queue<int> deck;
-    vector<int> discarded;
+void Play(int n) {
     
-    // Initialize the deck
-    for (int i = 1; i <= n; i++) {
-        deck.push(i);
+    deque<int> Card;
+    vector<int> discardDeck;
+
+    if (n == 1) {
+        cout << "Discarded cards:" << endl;
+        cout << "Remaining card: 1" << endl;
+        return;
     }
-    
-    // Perform the operations until one card remains
-    while (deck.size() > 1) {
-        // Discard the top card
-        discarded.push_back(deck.front());
-        deck.pop();
-        
-        // Move the next card to the bottom
-        int topCard = deck.front();
-        deck.pop();
-        deck.push(topCard);
+
+    for(int i = 1; i <= n; i++) {
+        Card.push_back(i);
     }
-    
-    // Output the results
-    if (!discarded.empty()) {
-        cout << "Discarded cards: ";
-        for (int i = 0; i < discarded.size(); i++) {
-            cout << discarded[i];
-            if (i < discarded.size() - 1) cout << ", ";
+
+    while(Card.size() > 1) {
+        discardDeck.push_back(Card.front());
+        Card.pop_front();
+
+        int front = Card.front();
+        Card.pop_front();
+        Card.push_back(front);
+    }
+
+    cout << "Discarded cards:";
+    if(!discardDeck.empty()) {
+        cout << " ";
+        for(int i = 0; i < discardDeck.size(); i++) {
+            cout << discardDeck[i];
+            if(i < discardDeck.size()-1) {
+                cout << ", ";
+            }
         }
-        cout << endl;
-    } else {
-        cout << "Discarded cards: " << endl;
     }
+    cout << endl;
     
-    cout << "Remaining card: " << deck.front() << endl;
+    cout << "Remaining card: " << Card.front() << endl;
+    // queue<int> card;
+    // vector<int> discardDeck;
+
+    // for (int i = 1; i <= n; i++) {
+    //     card.push(i);
+    // }
+
+    // while (card.size() > 1) {
+    //     discardDeck.push_back(card.front());
+    //     card.pop();
+    //     int T = card.front();
+    //     card.pop();
+    //     card.push(T);
+    // }
+
+    // cout << "Discarded cards:";
+    // if (!discardDeck.empty()) {
+    //     cout << " ";  
+    //     for (size_t i = 0; i < discardDeck.size(); i++) {
+    //         if (i > 0) cout << ", ";
+    //         cout << discardDeck[i];
+    //     }
+    // }
+    // cout << endl;
+    // cout <<"Remaining card: " << card.front()<<endl;
+    
 }
 
 int main() {
     int n;
-    
-    while (true) {
+    while (true)
+    {
         cin >> n;
-        if (n == 0) break;
-        processDeck(n);
+        if (n == 0) {
+            break;
+        }
+        Play(n);
     }
-    
+    cout << endl;
     return 0;
 }
