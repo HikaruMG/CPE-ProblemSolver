@@ -85,5 +85,3 @@ int main() {
 
     return 0;
 }
-
-//Testcpp is a C++ program that implements the Merge Sort algorithm to sort an array of integers. The program includes functions for merging two sorted subarrays, performing the recursive merge sort, and printing the array before and after sorting. The main function initializes an array, calls the merge sort function, and displays the results.
